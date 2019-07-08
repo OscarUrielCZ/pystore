@@ -22,15 +22,15 @@ Los paquetes con sus versiones están en **requirements.txt**
 
 Desde la raíz del proyecto ejecutar los siguientes comandos:
 
-"""
+```
 pip install -r requirements.txt
 python setup.py install
-"""
+```
 
 ### Ejecución
 
 Accede a la ayuda del script mediante
 
-"""
+```
 pystore --help
-"""
+```
