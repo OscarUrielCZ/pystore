@@ -9,7 +9,7 @@ def article():
 	pass
 
 @article.command()
-@click.option('-u', '--article_uid',
+@click.option('-u', '--uid',
 				type=str,
 				prompt=True,
 				help='The article uid you want to buy')
@@ -18,9 +18,20 @@ def article():
 				prompt=True,
 				help='How many articles')
 @click.pass_context
-def buy(ctx, article_uid, quantity):
+def buy(ctx, uid, quantity):
 	"""Buy an article"""
-	pass
+	if quantity > 0:
+		article_service = ArticleService(ctx.obj['table_name'])
+		article = article_service.get_article(uid)
+		article.increment_sales(quantity)
+		status = article_service.update_article(article)
+
+		if status:
+			click.echo('Article bought')
+		else:
+			click.echo('Error: something went wrong')
+	elif quantity < 0:
+		click.echo('Invalid quantity')
 
 @article.command()
 @click.option('-n', '--name',
@@ -42,7 +53,7 @@ def buy(ctx, article_uid, quantity):
 @click.pass_context
 def create(ctx, name, brand, price, content):
 	"""Create a new article"""
-	article = Article(name, brand, price, content)
+	article = Article(name, brand, price, content, 0)
 	article_service = ArticleService(ctx.obj['table_name'])
 	status = article_service.create_article(article)
 	if status:
@@ -57,10 +68,10 @@ def list(ctx):
 	article_service = ArticleService(ctx.obj['table_name'])
 	articles = article_service.articles_list()
 
-	click.echo('               uid                |   name   |   brand   |  price  | content ')
+	click.echo('             uid              |   name   |   brand   |  price  | content | sales')
 	click.echo('*' * 80)
 	for article in articles:
-		click.echo(f"{article['uid']} | {article['name']} | {article['brand']} | {article['price']} | {article['content']}")
+		click.echo(f"{article['uid']} | {article['name']} | {article['brand']} | {article['price']} | {article['content']} | {article['sales']}")
 
 @article.command()
 @click.option('-u', '--uid',
