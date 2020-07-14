@@ -2,3 +2,4 @@ __pycache__/
 article/__pycache__/
 .articles.csv
 pystore.egg-info/
+env/

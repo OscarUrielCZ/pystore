@@ -1,7 +1,5 @@
 import click
-
 from os import path
-
 from article import commands as article_commands
 
 TABLE_NAME = path.join(path.dirname(path.abspath(__file__)), '.articles.csv')
